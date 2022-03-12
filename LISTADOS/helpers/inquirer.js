@@ -13,6 +13,26 @@ const preguntas = [{
         {
             value: '2',
             name: '2. Listado tareas'
+        },
+        {
+            value: '3',
+            name: '3. Listado Completadas'
+        },
+        {
+            value: '4',
+            name: '4. Listado Pendientes'
+        },
+        {
+            value: '5',
+            name: '5. Listado Pendientes'
+        },
+        {
+            value: '6',
+            name: '6. Borrar'
+        },
+        {
+            value: '0',
+            name: '0. SALIR'
         }
     ]
 }];
@@ -40,6 +60,10 @@ const pausa = async()=>{
 //Aquí es donde el método de leerInput hace que lea el dato ingresado a la máquina
 //y además que tenga una validación que de afuerzas deba ingresar un valor
 //que sea diferente de cero para que el programa pueda correr.
+//----------------------------------------------------------------
+//Here is where the method of leerInput reads de data where we put it,
+//also, it has a validation that makes the user get data into the program
+//if is not zero, the program keeps going on
 const leerInput = async(message) =>{
     const question = [{
         type: 'input',
@@ -56,8 +80,44 @@ const leerInput = async(message) =>{
     return desc;
 }
 
+//Con el map hace que retorna un nuevo arreglo, el actual transforma a los hijos
+//O sea, que lo que haga en este arreglo, todos los que sean hijos tendrán esa agregación o modificación
+//---------------------------------------------------------------------------
+//The 'map' makes areturn inside of the array, the newest method transform the sons
+//It means, that this array, every son will have a modification of it
+//also, it takes de the id to return that value
+const listadoBorrar = async(tareas = [])=>{
+    
+    const choices = tareas.map((tarea,i) =>{
+        const idx = i+1;
+        return{
+            value: tarea.id,
+            name: `${idx} ${tarea.desc}`
+        }
+    });
+    const preguntas =[{
+        type: 'list',
+        name: 'id',
+        message: 'Borrar',
+        choices
+    }]
+    const {id} = await inquirer.prompt(preguntas);
+    return id;
+}
+
+const confirmar = (message) =>{
+    const question = [{
+        type: 'confirm',
+        name: 'ok',
+        message
+    }];
+    const {ok} = await inquirer.prompt(preguntas);
+}
+
 module.exports = {
     inquirerMenu,
     pausa,
-    leerInput
+    leerInput,
+    listadoBorrar,
+    confirmar
 }
