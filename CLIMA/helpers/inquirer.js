@@ -70,13 +70,13 @@ const leerInput = async(message) =>{
 //The 'map' makes areturn inside of the array, the newest method transform the sons
 //It means, that this array, every son will have a modification of it
 //also, it takes de the id to return that value
-const listadoBorrar = async(tareas = [])=>{
+const listplaces = async(lugares = [])=>{
     
-    const choices = tareas.map((tarea,i) =>{
+    const choices = lugares.map((lugar,i) =>{
         const idx = i+1;
         return{
-            value: tarea.id,
-            name: `${idx} ${tarea.desc}`
+            value: lugar.id,
+            name: `${idx} ${lugar.nombre}`
         }
     });
 
@@ -87,7 +87,7 @@ const listadoBorrar = async(tareas = [])=>{
     const preguntas =[{
         type: 'list',
         name: 'id',
-        message: 'Borrar',
+        message: 'Choose a place',
         choices
     }]
     const {id} = await inquirer.prompt(preguntas);
@@ -129,7 +129,7 @@ module.exports = {
     inquirerMenu,
     pausa,
     leerInput,
-    listadoBorrar,
+    listplaces,
     confirmar,
     listadoCheck
 }
