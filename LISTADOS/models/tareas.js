@@ -25,6 +25,12 @@ class Tareas {
         this._listado = {};
     }
 
+    borrarTarea(id = ''){
+        if(this._listado[id]){
+            delete this._listado[id];
+        }
+    }
+
     cargarTareasFromArray(tareas = []){
         //Por el forEach, cada tarea que se identifique con un id lo va a tomar e identificar
         //Using the forEach, each task that identifies with an id it will take it and identify
@@ -84,6 +90,19 @@ class Tareas {
         });
     }
     
+    cambioCompletado(ids = []){
+        ids.forEach(id=>{
+            const tarea = this._listado[id];
+            if(!tarea.completadoEn){
+                tarea.completadoEn = new Date().toISOString()
+            }
+        });
+        this.listadoArr.forEach(tarea=>{
+            if(!ids.includes(tarea.id)){
+                this._listado[tarea.id].completadoEn = null;
+            }
+        });
+    }
 }
 
 
