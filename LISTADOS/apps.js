@@ -1,7 +1,7 @@
 require('colors');
 
 const { guardarDB, leerDB } = require('./helpers/guardarArchivo');
-const {inquirerMenu, pausa, leerInput, listadoBorrar} = require('./helpers/inquirer');
+const {inquirerMenu, pausa, leerInput, listadoBorrar, confirmar, listadoCheck} = require('./helpers/inquirer');
 const Tareas = require('./models/tareas');
 
 //Lo ejecuto de manera asíncrona, que indica que hace un proceso, espera, y luego prosigue al método siguiente
@@ -35,17 +35,29 @@ const main = async() =>{
                 case '2':
                     tareas.listadoCompleto();
                     break;
+
                     case '3':
                         tareas.listadoPenCom(true);
                         break;
+
                         case '4':
                             tareas.listadoPenCom(false);
                             break;
+
                             case '5':
+                                const ids = await listadoCheck(tareas.listadoArr);
+                                tareas.cambioCompletado(ids);
                                 break;
+
                                 case '6':
                                     const id = await listadoBorrar(tareas.listadoArr);
-                                    console.log({id});
+                                    if(id !== '0'){
+                                    const ok = await confirmar('¿Seguro que desea eliminar?');
+                                    if(ok){
+                                        tareas.borrarTarea(id);
+                                        console.log('Tarea Borrada');
+                                    }
+                                }
                                     break;
         }
         guardarDB(tareas.listadoArr);
