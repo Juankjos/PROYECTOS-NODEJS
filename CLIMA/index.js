@@ -20,7 +20,14 @@ const main = async()=>{
                 //Selecciona el lugar y muestra una lista
                 //It choose the place showing a list
                 const id = await listplaces(lugares);
+                //Evita el error de presionar cero para cancelar
+                //Avoids the error pressing it zero to cancel
+                if(id === '0') continue;
                 const placeCho = lugares.find(l => l.id === id);
+
+                //Hace que al momento de ingresar algo se guarde en el historial
+                //It makes at the moment the user tipes and enter the citie, it store the data inside the method
+                busquedas.makeRecord(placeCho.nombre);
 
                 //Con la selección del lugar, muestra el clima que tiene
                 //Choosing the place, shows the weather it has
@@ -38,6 +45,19 @@ const main = async()=>{
                 break;
 
                 case 2:
+                    //Utiliza el modelo busquedas, toma el método historial y con un foreach recorre
+                    //el arreglo del lugar y el contador de i, se realiza una constante en el que idx 
+                    //es el índice, y para que no aparezca como 0 1 2 3 se agrega +1 para que se vea 1 2 3...
+                    //Por último imprime los resultados del lugar
+                    //_-------------------------------------
+                    //Using the model of busquedas, takes the method of historial and using a foreach
+                    //goes by the array of lugar and a counter of i, a constant is created that it will be the index
+                    //using a +1 so when it shows 1 2 3 instead of 0 1 2 3
+                    //At leats, it prints the results of lugar 
+                    busquedas.historialCap.forEach((lugar, i)=>{
+                        const idx = `${i+1}`;
+                        console.log(`${idx} ${lugar}`);
+                    });
                     break;
 
                     case 3:
