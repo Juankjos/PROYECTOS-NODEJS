@@ -1,11 +1,27 @@
+const fs = require('fs');
 const axios = require('axios');
 
 class Busquedas{
 
-    historial = ['Tehotihuacan','Mixapuesto','Yucatán'];
-
+    historial = [];
+    dbPath = './db/database.json';
+    //Lee la base de datos si existe
+    //It reads de data base if exists
     constructor(){
+        this.readDB();
+    }
 
+    //Para poner todas las primeras palabras en mayúsculas, tomamos el historial y creamos una variable que tome
+    //los lugares que se tomaron, que divida las palabras y que dentro de un arreglo, clasificar cada palabra del 
+    //string
+    get historialCap(){
+        return this.historial.map(lugar =>{
+
+            let palabras = lugar.split('');
+            palabras = palabras.map(p=>p[0].toUpperCase() + p.substring(1));
+
+            return palabras.join('');
+        });
     }
 
     //En esta sección, se declaran los parámetros de la aplicación que mandamos llamar,
@@ -75,6 +91,37 @@ class Busquedas{
         }catch(error){
             console.log(error);
         }
+    }
+
+    makeRecord(lugar= ''){
+
+        //Si el historail incluye el lugar que se ingresó, con el localLowerCase, se hace un return
+        //porque así significa que no tiene que guardar nada para el historial
+        //If historial includes the lugar that the user typed, using localLoweCase, we are using a return
+        //that it means that it doesn't have to store something in the historial
+        
+        if( this.historial.includes( lugar.toLocaleLowerCase() ) ){
+            return;
+        }
+        this.historial = this.historial.splice(0,5);
+
+        this.historial.unshift( lugar.toLocaleLowerCase() );
+
+        this.storeDB();
+    }
+
+    storeDB(){
+        const payload = {
+            hitorial: this.historial
+        };
+        fs.writeFileSync(this.dbPath, JSON.stringify(payload))
+    }
+    readDB(){
+        if(!fs.existsSync(this.dbPath)) return;
+            const info = fs.readFileSync(this.dbPath, {encoding: 'utf-8'});
+            const data = JSON.parse(info);
+
+            this.historial = data.historial;
     }
     
 }
